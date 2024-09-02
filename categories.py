@@ -5,7 +5,7 @@ import os
 import requests
 import sys
 import time
-from datetime import datetime
+import datetime
 
 # Telegram bot token
 TOKEN = os.getenv('TOKEN')
@@ -39,9 +39,13 @@ def get_data_from_sheets_on_start():
     #print(column_d_values)
 
     column_d = sheet.col_values(4)[1:] 
-
-    last_15_cells = [(row, value) for row, value in enumerate(column_d[-15:], start=len(column_d) - 13)]
-
+    current_day_in_month = datetime.date.today().day
+    if current_day_in_month > 4:
+        last_15_cells = [(row, value) for row, value in enumerate(column_d[-15:], start=len(column_d) - 13)]
+    else:
+        # Get only 5 cells
+        last_15_cells = [(row, value) for row, value in enumerate(column_d[-5:], start=len(column_d) - 13)]
+        
     for row, value in last_15_cells:
         first_cell_index = row
         break
