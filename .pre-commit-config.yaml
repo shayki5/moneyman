@@ -1,0 +1,110 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+default_language_version:
+  ruby: 3.2.2  # Define specific version to avoid using system version.
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0
+  hooks:
+
+  # Misc checks
+  - id: check-added-large-files
+    args: ["--maxkb=50"]
+  - id: check-merge-conflict
+  - id: check-case-conflict
+  - id: fix-byte-order-marker
+
+  # Check executables
+  - id: check-shebang-scripts-are-executable
+  - id: check-executables-have-shebangs
+
+  # Check symlinks
+  - id: check-symlinks
+  - id: destroyed-symlinks
+
+  # Check syntax
+  - id: check-yaml
+    args: [--unsafe]  # Because gitlab ci files use !reference tag
+  - id: check-json
+  #- id: check-toml
+  #- id: check-xml
+
+  # Fix whitespace
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: mixed-line-ending
+    args: [--fix=lf]
+
+  # Python specific checks
+  - id: check-ast
+  - id: check-docstring-first
+  # - id: requirements-txt-fixer
+  - id: debug-statements
+  - id: fix-encoding-pragma
+    args: ["--remove"]
+
+- repo: https://github.com/PyCQA/isort
+  rev: 5.13.2
+  hooks:
+  - id: isort
+    args: [--profile=black]
+
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.17.0
+  hooks:
+  - id: pyupgrade
+    args:
+    - --py311-plus
+
+- repo: https://github.com/psf/black
+  rev: 24.8.0
+  hooks:
+  - id: black
+
+- repo: https://github.com/PyCQA/flake8
+  rev: 7.1.1
+  hooks:
+  - id: flake8
+    args:
+    - --count
+    - --show-source
+    - --statistics
+    - --max-line-length=88
+    - --max-complexity=12
+    - --noqa-require-code
+    - --ignore=E203,W503,G004
+    additional_dependencies:
+    - flake8-broken-line==1.0.0
+    - flake8-bugbear==24.8.19
+    - flake8-comprehensions==3.15.0
+    - flake8-debugger==4.1.2
+    - flake8-logging-format==2024.24.12
+    - flake8-mutable==1.2.0
+    - flake8-noqa==1.4.0
+    - flake8-printf-formatting==1.1.2
+    - flake8-unused-arguments==0.0.13
+
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.10.0.1
+  hooks:
+  - id: shellcheck
+
+- repo: https://github.com/markdownlint/markdownlint
+  rev: v0.12.0
+  hooks:
+  - id: markdownlint
+    name: lint markdown files
+
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.29.2
+  hooks:
+  - id: check-github-workflows
+    name: validate schema of github workflows YAML files
+
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.29.2
+  hooks:
+  - id: check-github-actions
+    name: validate schema of github actions YAML files
