@@ -31,6 +31,7 @@ const {
   BUXFER_PASSWORD = "",
   BUXFER_ACCOUNTS = "",
   TRANSACTION_HASH_TYPE = "",
+  WEB_POST_URL = "",
 } = process.env;
 
 /**
@@ -59,6 +60,7 @@ export {
   BUXFER_PASSWORD,
   BUXFER_ACCOUNTS,
   TRANSACTION_HASH_TYPE,
+  WEB_POST_URL,
 };
 export const systemName = "moneyman";
 export const currentDate = format(Date.now(), "yyyy-MM-dd");
