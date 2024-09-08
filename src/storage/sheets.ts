@@ -206,20 +206,4 @@ export class GoogleSheetsStorage implements TransactionStorage {
     this.sheet = doc.sheetsByTitle[worksheetName];
   }
 
-  private transactionRow(tx: TransactionRow): SheetRow {
-    let abs = (tx.chargedAmount = Math.abs(tx.chargedAmount));
-    return {
-      date: format(parseISO(tx.date), "dd/MM/yyyy", {}),
-      amount: abs,
-      description: tx.description,
-      memo: tx.memo ?? "",
-      category: tx.category ?? "",
-      account: tx.account,
-      hash: TRANSACTION_HASH_TYPE === "moneyman" ? tx.uniqueId : tx.hash,
-      comment: "",
-      "scraped at": currentDate,
-      "scraped by": systemName,
-      identifier: `${tx.identifier ?? ""}`,
-    };
-  }
 }
