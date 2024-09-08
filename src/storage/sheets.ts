@@ -42,7 +42,7 @@ export function transactionRow(tx: TransactionRow): SheetRow {
   let abs_number = (tx.chargedAmount = Math.abs(tx.chargedAmount));
   return {
     date: format(parseISO(tx.date), "dd/MM/yyyy", {}),
-    amount: abs,
+    amount: abs_number,
     description: tx.description,
     memo: tx.memo ?? "",
     category: tx.category ?? "",
