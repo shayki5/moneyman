@@ -36,22 +36,22 @@ jobs:
         with:
           python-version: "3.11.4"
 
-      - name: Check if first day of the month
-        run: |
-          current_date=$(date +"%Y-%m-%d")
-          day=$(date -d "$current_date" +"%d")
-          echo $current_date
-          if [ "$day" = "01" ]; then
-            sudo apt install libxslt-dev libxml2-dev python3-dev 
-            printf "%s\n" "$GOOGLE_JSON" > google.json    
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            python gpt.py
-          else
-            echo "It is not the first day of the month."
-          fi
-        env:
-          GOOGLE_JSON: ${{ secrets.GOOGLE_JSON }}
+      # - name: Check if first day of the month
+      #   run: |
+      #     current_date=$(date +"%Y-%m-%d")
+      #     day=$(date -d "$current_date" +"%d")
+      #     echo $current_date
+      #     if [ "$day" = "01" ]; then
+      #       sudo apt install libxslt-dev libxml2-dev python3-dev libcairo2-dev
+      #       printf "%s\n" "$GOOGLE_JSON" > google.json    
+      #       python -m pip install --upgrade pip
+      #       pip install -r requirements.txt
+      #       python gpt.py
+      #     else
+      #       echo "It is not the first day of the month."
+      #     fi
+      #   env:
+      #     GOOGLE_JSON: ${{ secrets.GOOGLE_JSON }}
 
       - id: normalize-repository-name
         run: echo "repository=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
