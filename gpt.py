@@ -16,7 +16,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(
 client = gspread.authorize(creds)
 
 def create_new_sheet():
-    spreadsheet = client.open('ניסיון')
+    spreadsheet = client.open('אוטומציה הוצאות 2025')
     current_date = datetime.now()
     first_day_of_current_month = current_date.replace(day=1)
     last_day_of_previous_month = first_day_of_current_month - timedelta(days=1)
@@ -32,7 +32,7 @@ def create_new_sheet():
     new_sheet.update('A1:O1', [column_titles])
     print("New sheet created successfully!")
     
-    spreadsheet = client.open('ניהול הוצאות הבית 2024')
+    spreadsheet = client.open('ניהול הוצאות הבית 2025')
     source_sheet = spreadsheet.worksheet('נוכחי')
     new_sheet = spreadsheet.duplicate_sheet(source_sheet.id, new_sheet_name=formatted_date)
     cell_formula = new_sheet.cell(3, 3, value_render_option='FORMULA').value
@@ -120,9 +120,9 @@ def check_transactions(sheet_name, sheet1_title, sheet2_title):
     else:
         print("No transactions found in '{sheet2_title}' with higher amounts compared to '{sheet1_title}'.")
 
-#sum_category("ניסיון", "current")
+#sum_category("אוטומציה הוצאות 2025", "current")
 
-sheet_name = "ניהול הוצאות הבית 2024"
+sheet_name = "ניהול הוצאות הבית 2025"
 sheet1_title = "נוכחי"
 current_date = datetime.now()
 first_day_of_current_month = current_date.replace(day=1)
