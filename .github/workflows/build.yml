@@ -13,7 +13,6 @@ on:
       - ".eslintrc.js"
       - ".prettierrc.js"
       - ".github/workflows/build.yml"
-  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
