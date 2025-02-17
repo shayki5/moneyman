@@ -3,7 +3,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { glob } from "glob";
 import { createLogger } from "./logger.js";
-import { sendPhoto } from "../notifier.js";
 
 const logger = createLogger("failureScreenshot");
 const tempFolder = path.join(fs.realpathSync(os.tmpdir()), "moneyman");
@@ -15,16 +14,14 @@ export function getFailureScreenShotPath(companyId: string) {
   }
 
   const filePath = path.join(companyDir, `${companyId}-${Date.now()}.png`);
-  logger("getFailureScreenShotPath", { filePath });
+  logger("getFailureScreenShotPath %o", filePath);
 
   return filePath;
 }
 
-export async function sendFailureScreenShots() {
+export async function sendFailureScreenShots(
   try {
     const files = await glob(`${tempFolder}/**/*.png`, { absolute: true });
-    logger("Sending failure screenshots", { files });
-
     for (const file of files) {
       const folder = path.basename(path.dirname(file));
       await sendPhoto(file, `[${folder}] Failure screenshot`);

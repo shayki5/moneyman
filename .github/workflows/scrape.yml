@@ -19,10 +19,15 @@ on:
         default: "current"
         required: false
         description: "The name of the worksheet to write to"
+      parallelScrapes:
+        default: "1"
+        required: false
+        description: "Number of parallel scrapes to run"
   schedule:
     - cron: "00 06 * * *"
 env:
   REGISTRY: ghcr.io
+  MAX_PARALLEL_SCRAPERS: 3
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -88,6 +93,7 @@ jobs:
           -e BUXFER_ACCOUNTS
           -e TRANSACTION_HASH_TYPE
           -e WEB_POST_URL
+          -e MAX_PARALLEL_SCRAPERS
           ${{ env.REGISTRY }}/${{ steps.normalize-repository-name.outputs.repository }}:latest
         env:
           DEBUG: ""
@@ -117,7 +123,8 @@ jobs:
           BUXFER_ACCOUNTS: ${{ secrets.BUXFER_ACCOUNTS }}
           TRANSACTION_HASH_TYPE: ${{ secrets.TRANSACTION_HASH_TYPE }}
           WEB_POST_URL: ${{ secrets.WEB_POST_URL }}
-
+          MAX_PARALLEL_SCRAPERS: ${{ github.event.inputs.parallelScrapes || env.MAX_PARALLEL_SCRAPERS }}
+          
       - name: Update categories
         run: |
           current_day=$(date +%a)
@@ -141,3 +148,4 @@ jobs:
         with:
           url: "${{ secrets.UPDATE_WEB_HOOK }}"
           method: "GET"
+         

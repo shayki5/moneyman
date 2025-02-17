@@ -97,6 +97,7 @@ Example:
 | `TRANSACTION_HASH_TYPE`     | ``                 | The hash type to use for the transaction hash. Can be `moneyman` or empty. The default will be changed to `moneyman` in the upcoming versions |
 | `HIDDEN_DEPRECATIONS`       | ''                 | A comma separated list of deprecations to hide                                                                                                |
 | `PUPPETEER_EXECUTABLE_PATH` | `undefined`        | An ExecutablePath for the scraper. if undefined defaults to system.                                                                           |
+| `MAX_PARALLEL_SCRAPERS`     | `1`                | The maximum number of parallel scrapers to run                                                                                                |
 
 ### Get notified in telegram
 
@@ -193,9 +194,10 @@ The transactions will be sent as a JSON array in the body of the request with th
 
 Use the following env vars to setup:
 
-| env variable name | description        |
-| ----------------- | ------------------ |
-| `WEB_POST_URL `   | The URL to post to |
+| env variable name              | description                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `WEB_POST_URL`                 | The URL to post to                                                           |
+| `WEB_POST_AUTHORIZATION_TOKEN` | The Authorization header value (i.e. `Bearer *****`, but can use any schema) |
 
 > [!IMPORTANT]
 > Be sure to post only to a trusted server.
@@ -206,8 +208,11 @@ WIP
 
 ### Export to google sheets
 
-1. Follow the instructions [here](https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication?id=service-account) to create a google service account.
+1. Follow the instructions [here](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication?id=setting-up-your-quotapplicationquot) to create a google service account.
 2. Create a [new sheet](https://sheets.new/) and share it with your service account using the `GOOGLE_SERVICE_ACCOUNT_EMAIL`.
+3. Create a sheet named `_moneyman` with the following headers in the first row:
+   | date | amount | description | memo | category | account | hash | comment | scraped at | scraped by | identifier | chargedCurrency |
+   | ---- | ------ | ----------- | ---- | -------- | ------- | ---- | ------- | ---------- | ---------- | ---------- | --------------- |
 
 Use the following env vars to setup:
 

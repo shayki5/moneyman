@@ -1,9 +1,9 @@
 import { Telegraf, TelegramError } from "telegraf";
-import { Message } from "telegraf/typings/core/types/typegram";
-import { TELEGRAM_API_KEY, TELEGRAM_CHAT_ID } from "./config.js";
-import { createLogger, logToPublicLog } from "./utils/logger.js";
+import { createLogger, logToPublicLog } from "../utils/logger.js";
 
 const logger = createLogger("notifier");
+
+const { TELEGRAM_API_KEY, TELEGRAM_CHAT_ID = "" } = process.env;
 
 const bot =
   TELEGRAM_API_KEY && TELEGRAM_CHAT_ID ? new Telegraf(TELEGRAM_API_KEY) : null;
@@ -13,6 +13,11 @@ logToPublicLog(
     ? "Telegram logger initialized, status and errors will be sent"
     : "No Telegram bot info, status and errors will not be sent",
 );
+
+logger(`Telegram bot initialized: ${Boolean(bot)}`);
+if (bot) {
+  logger(`Telegram chat ID: ${TELEGRAM_CHAT_ID}`);
+}
 
 export async function send(message: string) {
   if (message.length > 4096) {
@@ -30,10 +35,6 @@ export async function sendPhoto(photoPath: string, caption: string) {
     { source: photoPath },
     { caption, has_spoiler: true },
   );
-}
-
-export async function deleteMessage(message: Message.TextMessage) {
-  await bot?.telegram.deleteMessage(TELEGRAM_CHAT_ID, message.message_id);
 }
 
 export async function editMessage(
