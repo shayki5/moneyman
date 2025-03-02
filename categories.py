@@ -19,8 +19,8 @@ SCOPE = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/au
 # Connect to Google Sheets
 creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDS_FILE, SCOPE)
 client = gspread.authorize(creds)
-sheet = client.open('ניהול הוצאות הבית 2024').worksheet('נוכחי')
-mapping_sheet = client.open('ניהול הוצאות הבית 2024').worksheet('mapping')
+sheet = client.open('ניהול הוצאות הבית 2025').worksheet('נוכחי')
+mapping_sheet = client.open('ניהול הוצאות הבית 2025').worksheet('mapping')
 
 # Initialize the Telegram bot
 bot = telebot.TeleBot(TOKEN)
