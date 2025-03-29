@@ -74,7 +74,7 @@ export class BuxferStorage implements TransactionStorage {
         await this.buxferClient.addTransactions(txToSend, true);
       logger("transactions sent to Buxfer successfully!");
       stats.added = resp.addedTransactionIds.length;
-      stats.existing = resp.duplicatedTransactionIds.length;
+      stats.existing = resp.updatedTransactionIds.length;
       stats.skipped += stats.existing;
     }
 
