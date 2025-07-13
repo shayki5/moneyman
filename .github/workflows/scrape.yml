@@ -136,17 +136,34 @@ jobs:
           WEB_POST_URL: ${{ secrets.WEB_POST_URL }}
 
       - name: Update categories
-        run: |
-          current_day=$(date +%a)
-          if [ "$current_day" == "Sat" ]; then
-            echo "It's Shabbat, not update categories."
-          else
-            sudo apt-get update && sudo apt-get -y --no-install-recommends install libxslt-dev libxml2-dev python3-dev 
-            printf "%s\n" "$GOOGLE_JSON" > google.json    
-            python -m pip install --upgrade pip
-            pip install pyTelegramBotAPI gspread oauth2client
-            python categories.py
-          fi
+        run: |            
+            current_day=$(date +%a)
+            
+            if [ "$current_day" == "Sat" ]; then
+                echo "It's Shabbat, not update categories."
+            else
+                # Detect OS and use appropriate package manager
+                if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+                    # Linux - use apt-get
+                    sudo apt-get update && sudo apt-get -y --no-install-recommends install libxslt-dev libxml2-dev python3-dev
+                elif [[ "$OSTYPE" == "darwin"* ]]; then
+                    # macOS - use homebrew
+                    if command -v brew &> /dev/null; then
+                        brew install libxslt libxml2
+                    else
+                        echo "Homebrew not found. Please install Homebrew first."
+                        exit 1
+                    fi
+                else
+                    echo "Unsupported OS: $OSTYPE"
+                    exit 1
+                fi
+                
+                printf "%s\n" "$GOOGLE_JSON" > google.json
+                python -m pip install --upgrade pip
+                pip install pyTelegramBotAPI gspread oauth2client
+                python categories.py
+            fi
         env:
           GOOGLE_JSON: ${{ secrets.GOOGLE_JSON }}
           TOKEN: ${{ secrets.TELEGRAM_API_KEY }}
