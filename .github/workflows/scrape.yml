@@ -37,18 +37,35 @@ jobs:
           python-version: "3.11.4"
 
       - name: Check if first day of the month
-        run: |
+        run: |          
           current_date=$(date +"%Y-%m-%d")
-          day=$(date -d "$current_date" +"%d")
+          day=$(date +"%d")
           echo $current_date
+          
           if [ "$day" = "01" ]; then
-            sudo apt-get update && sudo apt-get -y --no-install-recommends install libxslt-dev libxml2-dev python3-dev libcairo2-dev
-            printf "%s\n" "$GOOGLE_JSON" > google.json    
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            python gpt.py
+              # Detect OS and use appropriate package manager
+              if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+                  # Linux - use apt-get
+                  sudo apt-get update && sudo apt-get -y --no-install-recommends install libxslt-dev libxml2-dev python3-dev libcairo2-dev
+              elif [[ "$OSTYPE" == "darwin"* ]]; then
+                  # macOS - use homebrew
+                  if command -v brew &> /dev/null; then
+                      brew install libxslt libxml2 cairo
+                  else
+                      echo "Homebrew not found. Please install Homebrew first."
+                      exit 1
+                  fi
+              else
+                  echo "Unsupported OS: $OSTYPE"
+                  exit 1
+              fi
+              
+              printf "%s\n" "$GOOGLE_JSON" > google.json
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+              python gpt.py
           else
-            echo "It is not the first day of the month."
+              echo "It is not the first day of the month."
           fi
         env:
           GOOGLE_JSON: ${{ secrets.GOOGLE_JSON }}
