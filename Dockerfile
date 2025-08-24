@@ -1,4 +1,4 @@
-FROM ghcr.io/puppeteer/puppeteer
+FROM ghcr.io/canardconfit/puppeteer-docker
 
 WORKDIR /app
 
